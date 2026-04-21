@@ -1,0 +1,22 @@
+---
+description: Standards for VAST DataEngine manifest files (pipelines, triggers, secrets)
+alwaysApply: false
+globs:
+  - "**/*pipeline*.yaml"
+  - "**/*trigger*.yaml"
+  - "**/*secret*.yaml"
+  - "**/*function*.yaml"
+---
+
+dataengine-manifest-standards:
+
+- Use kebab-case for all resource names (functions, triggers, pipelines).
+- Use VAST Resource Names (VRNs) in the format `vast:dataengine:<type>:<name>` for cross-references.
+- Pipeline instance names must be unique and are distinct from global resource names.
+- Trigger-to-function links require a `topic` field; function-to-function links do not.
+- Always specify `retries` in link config for production pipelines (recommended: 3).
+- Secret file `name` must match an entry in `manifest.config.secrets`.
+- Secret file `kubernetes_cluster_vrn` and `namespace` must match the pipeline's.
+- Never commit real credentials in secret files — use placeholders like `<your-access-key>`.
+- Specify resource limits for all function deployments (cpu, memory, concurrency, timeout).
+- Use `--dry-run` to validate manifests before applying changes.

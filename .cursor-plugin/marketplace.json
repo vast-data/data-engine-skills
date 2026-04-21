@@ -1,0 +1,19 @@
+{
+  "name": "vast-dataengine-skills",
+  "owner": {
+    "name": "VAST Data",
+    "email": "data-solutions@vastdata.com"
+  },
+  "metadata": {
+    "description": "Cursor skills for building and deploying VAST DataEngine serverless applications",
+    "version": "0.1.0",
+    "pluginRoot": "plugins"
+  },
+  "plugins": [
+    {
+      "name": "vast-dataengine",
+      "source": "./plugins/vast-dataengine",
+      "description": "Skills, rules, and guides for creating VAST DataEngine functions, triggers, and pipelines using the vastde CLI"
+    }
+  ]
+}

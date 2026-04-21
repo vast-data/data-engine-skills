@@ -1,0 +1,21 @@
+{
+  "name": "vast-dataengine",
+  "displayName": "VAST DataEngine",
+  "version": "0.1.0",
+  "description": "Skills and rules for building VAST DataEngine serverless functions, triggers, and pipelines with the vastde CLI.",
+  "author": {
+    "name": "VAST Data",
+    "email": "data-solutions@vastdata.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "vast",
+    "dataengine",
+    "serverless",
+    "functions",
+    "pipelines",
+    "triggers",
+    "vastde"
+  ],
+  "logo": "assets/logo.jpg"
+}

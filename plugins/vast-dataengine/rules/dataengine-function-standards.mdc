@@ -1,0 +1,21 @@
+---
+description: Coding standards for VAST DataEngine serverless functions
+alwaysApply: false
+globs:
+  - "**/main.py"
+  - "**/handler*.py"
+---
+
+dataengine-function-standards:
+
+- Every function handler file must export `init(ctx)` and `handler(ctx, event: VastEvent)`.
+- Import `VastEvent` from `vast_runtime.vast_event` — it is provided by the DataEngine runtime, not in requirements.txt.
+- Load all configuration in `init(ctx)` from `ctx.secrets`, never hardcode credentials or endpoints.
+- Use Pydantic `BaseModel` for settings validation with a `from_ctx_secrets` classmethod.
+- Always return a dict from `handler` — it becomes the input for the next function in the pipeline.
+- Wrap major processing steps in `ctx.tracer.start_as_current_span("SpanName")` for tracing.
+- Use `ctx.logger` for structured logging, not `print()`.
+- Register custom metrics in `init(ctx)` using `ctx.counter()` and `ctx.histogram()`.
+- Handle errors gracefully — catch exceptions, log them, and return `{"status": "error", "error": str(e)}`.
+- Pin dependency versions in `requirements.txt`.
+- Every action should have log / trace
