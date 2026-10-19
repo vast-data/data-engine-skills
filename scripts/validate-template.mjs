@@ -44,6 +44,18 @@ function walkFiles(dir, exts) {
 
 const KEBAB = /^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/;
 
+// Match Cursor's resolvePluginSourcePath: strip a leading "./", then always
+// prepend metadata.pluginRoot. Source is relative to pluginRoot, not the repo root.
+function resolvePluginSource(source, pluginRoot) {
+  if (typeof source !== "string" || source.length === 0) return null;
+  let path = source.startsWith("./") ? source.slice(2) : source;
+  if (typeof pluginRoot === "string") {
+    let root = pluginRoot.startsWith("./") ? pluginRoot.slice(2) : pluginRoot;
+    if (root.endsWith("/")) root = root.slice(0, -1);
+    if (root) path = `${root}/${path}`;
+  }
+  return path || ".";
+}
 // --- Marketplace manifest ---
 const mpPath = join(ROOT, ".cursor-plugin", "marketplace.json");
 if (!existsSync(mpPath)) {
@@ -59,11 +71,18 @@ if (!Array.isArray(mp.plugins) || mp.plugins.length === 0) err("Marketplace plug
 
 // --- Validate each plugin ---
 for (const entry of mp.plugins || []) {
-  const pluginDir = resolve(ROOT, entry.source);
+  const resolvedSource = resolvePluginSource(entry.source, mp.metadata?.pluginRoot);
+  if (!resolvedSource) {
+    err(`Plugin ${entry.name ?? "(unnamed)"}: source must be a relative path string`);
+    continue;
+  }
+  const pluginDir = resolve(ROOT, resolvedSource);
   const rel = relative(ROOT, pluginDir);
 
-  if (!existsSync(pluginDir)) { err(`Plugin dir missing: ${rel}`); continue; }
-
+  if (!existsSync(pluginDir)) {
+    err(`Plugin dir missing: ${rel} (source ${JSON.stringify(entry.source)} with pluginRoot ${JSON.stringify(mp.metadata?.pluginRoot ?? null)})`);
+    continue;
+  }
   const pjPath = join(pluginDir, ".cursor-plugin", "plugin.json");
   if (!existsSync(pjPath)) { err(`Missing plugin.json: ${rel}/.cursor-plugin/plugin.json`); continue; }
 
