@@ -39,16 +39,16 @@ Add only the components you need:
 
 ## 3. Register in marketplace manifest
 
-Edit `.cursor-plugin/marketplace.json` and append a new entry:
+Edit `.cursor-plugin/marketplace.json` and append a new entry. `metadata.pluginRoot` is `plugins`, and Cursor always prepends that prefix to `source`. Set `source` to the directory name under `plugins/`, not a path from the repo root:
 
 ```json
 {
   "name": "my-new-plugin",
-  "source": "./plugins/my-new-plugin",
+  "source": "my-new-plugin",
   "description": "Describe your plugin"
 }
 ```
-
+That entry resolves to `plugins/my-new-plugin`. A source of `./plugins/my-new-plugin` resolves to `plugins/plugins/my-new-plugin`, which does not exist, so the plugin is never ingested.
 ## 4. Validate
 
 ```bash
@@ -58,7 +58,7 @@ node scripts/validate-template.mjs
 ## 5. Common pitfalls
 
 - Plugin name not kebab-case
-- Source path mismatch
+- Source path includes `plugins/` when `metadata.pluginRoot` is already `plugins` (use the directory name only)
 - Missing `.cursor-plugin/plugin.json`
 - Missing frontmatter keys (`name`, `description`) in skills, agents, commands
 - Rule files missing frontmatter `description`

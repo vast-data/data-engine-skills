@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "vast-dataengine",
-      "source": "./plugins/vast-dataengine",
+      "source": "vast-dataengine",
       "description": "Skills, rules, and guides for creating VAST DataEngine functions, triggers, and pipelines using the vastde CLI"
     }
   ]
